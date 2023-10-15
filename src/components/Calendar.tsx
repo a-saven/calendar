@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { format, startOfMonth, endOfMonth, eachDayOfInterval, addMonths, subMonths, isToday } from "date-fns";
+import { useState } from "react";
+import { format, startOfMonth, endOfMonth, eachDayOfInterval, addMonths, subMonths, isToday, getDay } from "date-fns";
 import "./Calendar.css";
 
 interface Event {
@@ -52,7 +52,16 @@ const Calendar = () => {
           &gt;
         </span>
       </div>
+      <div className="calendar-header">
+        {["Sun", "Mon", "Tues", "Wednes", "Thurs", "Fri", "Satur"].map((day) => (
+          <div key={day}>{day}</div>
+        ))}
+      </div>
       <div className="calendar-container">
+        {Array.from({ length: getDay(start) }).map((_, idx) => (
+          <div key={`empty-start-${idx}`} className="calendar-day"></div>
+        ))}
+
         {days.map((day) => (
           <div
             key={day.toString()}
@@ -64,6 +73,9 @@ const Calendar = () => {
           >
             {format(day, "d")}
           </div>
+        ))}
+        {Array.from({ length: 6 - getDay(end) }).map((_, idx) => (
+          <div key={`empty-end-${idx}`} className="calendar-day"></div>
         ))}
       </div>
       {showModal && (
