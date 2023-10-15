@@ -1,7 +1,10 @@
 .calendar-container {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  grid-gap: 16px;
+  gap: 16px;
+  width: 100%;
+  max-width: 800px;
+  margin: auto;
 }
 
 .calendar-day {
@@ -9,10 +12,91 @@
   height: 40px;
   display: flex;
   justify-content: center;
+  text-align: center;
   align-items: center;
-  cursor: pointer;
+  border-radius: 50%; /* Makes it a circle */
 }
 
 .event {
   background-color: yellow;
+}
+
+.calendar-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: auto;
+}
+
+.today {
+  background-color: blue;
+  color: white;
+}
+
+.close-button {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 5px;
+  cursor: pointer;
+}
+
+.nav-area {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  width: 100%;
+  max-width: 800px;
+}
+
+.nav-button {
+  font-size: 24px;
+  margin: 0 10px;
+  cursor: pointer;
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1;
+}
+
+.modal {
+  z-index: 2;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 20px;
+  border: 1px solid #ccc;
+  background-color: #fff;
+  position: relative;
+  width: 60%;
+  min-width: 300px;
+  max-width: 500px;
+}
+
+input[type="text"] {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.today-event {
+  background-color: green;
+  color: white;
+}
+
+@media screen and (max-width: 600px) {
+  .modal {
+    width: 80%;
+    min-width: 200px;
+  }
+  .calendar-container {
+    gap: 8px;
+  }
 }
