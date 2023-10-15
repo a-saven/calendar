@@ -59,7 +59,7 @@ const Calendar = () => {
       </div>
       <div className="calendar-container">
         {Array.from({ length: getDay(start) }).map((_, idx) => (
-          <div key={`empty-start-${idx}`} className="calendar-day"></div>
+          <div key={`empty-start-${idx}`} className="calendar-day empty"></div>
         ))}
 
         {days.map((day) => (
@@ -75,7 +75,7 @@ const Calendar = () => {
           </div>
         ))}
         {Array.from({ length: 6 - getDay(end) }).map((_, idx) => (
-          <div key={`empty-end-${idx}`} className="calendar-day"></div>
+          <div key={`empty-end-${idx}`} className="calendar-day emty"></div>
         ))}
       </div>
       {showModal && (
