@@ -1,6 +1,6 @@
 // Calendar.tsx
 import { useState } from "react";
-import { format, startOfMonth, endOfMonth, eachDayOfInterval } from "date-fns";
+import { format, startOfMonth, endOfMonth, eachDayOfInterval, addMonths, subMonths } from "date-fns";
 import "./Calendar.css";
 
 interface Event {
@@ -27,12 +27,7 @@ const Calendar = () => {
 
   return (
     <div>
-      <button onClick={() => setCurrentDate((prevDate) => new Date(prevDate.setMonth(prevDate.getMonth() - 1)))}>
-        Previous
-      </button>
-      <button onClick={() => setCurrentDate((prevDate) => new Date(prevDate.setMonth(prevDate.getMonth() + 1)))}>
-        Next
-      </button>
+      <h1>{format(currentDate, "MMMM yyyy")}</h1>
       <div className="calendar-container">
         {days.map((day: any) => (
           <div key={day.toString()} className={`calendar-day ${hasEvent(day) ? "event" : ""}`}>
@@ -40,6 +35,8 @@ const Calendar = () => {
           </div>
         ))}
       </div>
+      <button onClick={() => setCurrentDate((prevDate) => subMonths(prevDate, 1))}>Previous</button>
+      <button onClick={() => setCurrentDate((prevDate) => addMonths(prevDate, 1))}>Next</button>
     </div>
   );
 };
