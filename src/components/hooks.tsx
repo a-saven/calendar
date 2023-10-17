@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, SetStateAction, Dispatch } from "react";
 import { startOfMonth, endOfMonth, eachDayOfInterval, isToday } from "date-fns";
 
 interface Event {
@@ -6,7 +6,13 @@ interface Event {
   description: string;
 }
 
-export const useCalendar = (initialDate: Date) => {
+interface UseCalendarReturn {
+  currentDate: Date;
+  setCurrentDate: Dispatch<SetStateAction<Date>>;
+  days: Date[];
+}
+
+export const useCalendar = (initialDate: Date): UseCalendarReturn => {
   const [currentDate, setCurrentDate] = useState(initialDate);
   const start = startOfMonth(currentDate);
   const end = endOfMonth(currentDate);
@@ -19,15 +25,29 @@ export const useCalendar = (initialDate: Date) => {
   };
 };
 
-export const useEvent = (initialEvents: Event[]) => {
+interface UseEventReturn {
+  events: Event[];
+  setEvents: Dispatch<SetStateAction<Event[]>>;
+  showModal: boolean;
+  setShowModal: Dispatch<SetStateAction<boolean>>;
+  selectedDate: Date | null;
+  setSelectedDate: Dispatch<SetStateAction<Date | null>>;
+  eventDesc: string;
+  setEventDesc: Dispatch<SetStateAction<string>>;
+  hasEvent: (date: Date) => boolean;
+  addEvent: () => void;
+  getDayClass: (day: Date) => string;
+}
+
+export const useEvent = (initialEvents: Event[]): UseEventReturn => {
   const [events, setEvents] = useState(initialEvents);
   const [showModal, setShowModal] = useState(false);
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [eventDesc, setEventDesc] = useState<string>("");
 
-  const hasEvent = (date: Date) => events.some((event) => event.date.toDateString() === date.toDateString());
+  const hasEvent = (date: Date): boolean => events.some((event) => event.date.toDateString() === date.toDateString());
 
-  const addEvent = () => {
+  const addEvent = (): void => {
     if (selectedDate) {
       setEvents([...events, { date: selectedDate, description: eventDesc }]);
       setShowModal(false);
@@ -35,7 +55,7 @@ export const useEvent = (initialEvents: Event[]) => {
     }
   };
 
-  const getDayClass = (day: Date) => {
+  const getDayClass = (day: Date): string => {
     const isTodayDate = isToday(day);
     if (isTodayDate && hasEvent(day)) return "today-event";
     if (isTodayDate) return "today";

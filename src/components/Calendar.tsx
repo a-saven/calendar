@@ -4,7 +4,7 @@ import CalendarHeader from "./Header";
 import CalendarDays from "./Days";
 import EventModal from "./EventModal";
 import "./Calendar.css";
-import { useCalendar, useEvent } from "./hooks"; // Import the hooks
+import { useCalendar, useEvent } from "./hooks";
 
 const Calendar: React.FC = () => {
   const { currentDate, setCurrentDate, days } = useCalendar(new Date());
