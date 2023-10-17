@@ -44,7 +44,7 @@ const Calendar: React.FC = () => {
   };
 
   return (
-    <div className="calendar-wrapper">
+    <div className="calendar-wrapper" data-testid="calendar-wrapper">
       <CalendarNav currentDate={currentDate} setCurrentDate={setCurrentDate} />
       <CalendarHeader />
       <CalendarDays
