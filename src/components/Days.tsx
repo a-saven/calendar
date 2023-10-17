@@ -1,8 +1,11 @@
 import { format } from "date-fns";
 import { motion } from "framer-motion";
+import { Event } from "./hooks";
 
 interface CalendarDaysProps {
   days: Date[];
+  events: Event[];
+  setEvents: React.Dispatch<React.SetStateAction<Event[]>>;
   getDayClass: (day: Date) => string;
   setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
   setSelectedDate: React.Dispatch<React.SetStateAction<Date | null>>;

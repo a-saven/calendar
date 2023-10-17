@@ -1,7 +1,9 @@
 import { useState, SetStateAction, Dispatch } from "react";
 import { startOfMonth, endOfMonth, eachDayOfInterval, isToday } from "date-fns";
+import { v4 as uuidv4 } from "uuid";
 
-interface Event {
+export interface Event {
+  id: string;
   date: Date;
   description: string;
 }
@@ -37,6 +39,8 @@ interface UseEventReturn {
   hasEvent: (date: Date) => boolean;
   addEvent: () => void;
   getDayClass: (day: Date) => string;
+  deleteEvent: (id: string) => void;
+  rearrangEvent: (newOrderEvents: Event[]) => void;
 }
 
 export const useEvent = (initialEvents: Event[]): UseEventReturn => {
@@ -49,10 +53,23 @@ export const useEvent = (initialEvents: Event[]): UseEventReturn => {
 
   const addEvent = (): void => {
     if (selectedDate) {
-      setEvents([...events, { date: selectedDate, description: eventDesc }]);
+      const newEvent: Event = {
+        id: uuidv4(),
+        date: selectedDate,
+        description: eventDesc,
+      };
+      setEvents([...events, newEvent]);
       setShowModal(false);
       setEventDesc("");
     }
+  };
+
+  const deleteEvent = (id: string) => {
+    setEvents(events.filter((event) => event.id !== id));
+  };
+
+  const rearrangEvent = (newOrderEvents: Event[]) => {
+    setEvents(newOrderEvents);
   };
 
   const getDayClass = (day: Date): string => {
@@ -75,5 +92,7 @@ export const useEvent = (initialEvents: Event[]): UseEventReturn => {
     hasEvent,
     addEvent,
     getDayClass,
+    deleteEvent,
+    rearrangEvent,
   };
 };
