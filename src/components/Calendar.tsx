@@ -1,44 +1,15 @@
-import { useState } from "react";
-import { startOfMonth, endOfMonth, eachDayOfInterval, isToday } from "date-fns";
+import React from "react";
 import CalendarNav from "./Navigation";
 import CalendarHeader from "./Header";
 import CalendarDays from "./Days";
 import EventModal from "./EventModal";
 import "./Calendar.css";
-
-interface Event {
-  date: Date;
-  description: string;
-}
+import { useCalendar, useEvent } from "./hooks"; // Import the hooks
 
 const Calendar: React.FC = () => {
-  const [currentDate, setCurrentDate] = useState(new Date());
-  const [events, setEvents] = useState<Event[]>([]);
-  const [showModal, setShowModal] = useState(false);
-  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
-  const [eventDesc, setEventDesc] = useState<string>("");
-
-  const start = startOfMonth(currentDate);
-  const end = endOfMonth(currentDate);
-  const days = eachDayOfInterval({ start, end });
-
-  const hasEvent = (date: Date) => events.some((event) => event.date.toDateString() === date.toDateString());
-
-  const addEvent = () => {
-    if (selectedDate) {
-      setEvents([...events, { date: selectedDate, description: eventDesc }]);
-      setShowModal(false);
-      setEventDesc("");
-    }
-  };
-
-  const getDayClass = (day: Date) => {
-    const isTodayDate = isToday(day);
-    if (isTodayDate && hasEvent(day)) return "today-event";
-    if (isTodayDate) return "today";
-    if (hasEvent(day)) return "event";
-    return "";
-  };
+  const { currentDate, setCurrentDate, days } = useCalendar(new Date());
+  const { showModal, setShowModal, selectedDate, setSelectedDate, eventDesc, setEventDesc, addEvent, getDayClass } =
+    useEvent([]);
 
   return (
     <div className="calendar-wrapper">
