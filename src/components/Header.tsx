@@ -1,8 +1,8 @@
 const CalendarHeader: React.FC = () => {
   return (
     <div className="calendar-header">
-      {["S", "M", "T", "W", "T", "F", "S"].map((day) => (
-        <div key={day}>{day}</div>
+      {["S", "M", "T", "W", "T", "F", "S"].map((day, index) => (
+        <div key={index}>{day}</div>
       ))}
     </div>
   );

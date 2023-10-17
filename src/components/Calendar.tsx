@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import CalendarNav from "./Navigation";
 import CalendarHeader from "./Header";
 import CalendarDays from "./Days";
@@ -22,7 +22,26 @@ const Calendar: React.FC = () => {
     getDayClass,
     deleteEvent,
     rearrangEvent,
-  } = useEvent([]);
+  } = useEvent([], currentDate);
+
+  const [isEditing, setIsEditing] = useState(false);
+  const [editedEvent, setEditedEvent] = useState<Event | null>(null);
+
+  const editEvent = (event: Event) => {
+    setIsEditing(true);
+    setSelectedDate(event.date);
+    setEventDesc(event.description);
+    setShowModal(true);
+    setEditedEvent(event);
+  };
+
+  const updateEvent = () => {
+    if (editedEvent) {
+      setEvents(events.map((e) => (e.id === editedEvent.id ? { ...editedEvent, description: eventDesc } : e)));
+      setIsEditing(false);
+      setShowModal(false);
+    }
+  };
 
   return (
     <div className="calendar-wrapper">
@@ -32,11 +51,19 @@ const Calendar: React.FC = () => {
         days={days}
         events={events}
         setEvents={setEvents}
-        setShowModal={setShowModal}
         setSelectedDate={setSelectedDate}
-        getDayClass={getDayClass}
+        selectedDate={selectedDate}
+        getDayClass={(day) => getDayClass(day, selectedDate)}
       />
-      <DayEvents events={events} onDelete={deleteEvent} onRearrange={rearrangEvent} />
+      <DayEvents
+        currentDate={currentDate}
+        selectedDate={selectedDate}
+        events={events}
+        onDelete={deleteEvent}
+        onRearrange={rearrangEvent}
+        onEdit={editEvent}
+        setShowModal={setShowModal}
+      />
       <EventModal
         showModal={showModal}
         selectedDate={selectedDate}
@@ -44,6 +71,8 @@ const Calendar: React.FC = () => {
         setEventDesc={setEventDesc}
         setShowModal={setShowModal}
         addEvent={addEvent}
+        editEvent={updateEvent}
+        isEditing={isEditing}
       />
     </div>
   );

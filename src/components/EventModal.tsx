@@ -1,5 +1,6 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { format } from "date-fns";
+import "./EventModal.css";
 
 interface EventModalProps {
   showModal: boolean;
@@ -8,6 +9,8 @@ interface EventModalProps {
   setEventDesc: React.Dispatch<React.SetStateAction<string>>;
   setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
   addEvent: () => void;
+  editEvent: () => void;
+  isEditing: boolean;
 }
 
 const EventModal: React.FC<EventModalProps> = ({
@@ -17,6 +20,8 @@ const EventModal: React.FC<EventModalProps> = ({
   setEventDesc,
   setShowModal,
   addEvent,
+  editEvent,
+  isEditing,
 }) => {
   return (
     <AnimatePresence>
@@ -32,10 +37,23 @@ const EventModal: React.FC<EventModalProps> = ({
             <button className="close-button" onClick={() => setShowModal(false)}>
               X
             </button>
-            <h2>Add Event for {format(selectedDate!, "MMMM do, yyyy")}</h2>
-            <input type="text" value={eventDesc} onChange={(e) => setEventDesc(e.target.value)} />
-            <button onClick={addEvent}>Add</button>
-            <button onClick={() => setShowModal(false)}>Cancel</button>
+            <h2 className="modal-title">
+              {isEditing ? "Edit" : "Add"} Event for {format(selectedDate!, "MMMM do, yyyy")}
+            </h2>
+            <input
+              className="modal-input"
+              type="text"
+              value={eventDesc}
+              onChange={(e) => setEventDesc(e.target.value)}
+            />
+            <div className="button-container">
+              <button className="action-button" onClick={isEditing ? editEvent : addEvent}>
+                {isEditing ? "Edit" : "Add"}
+              </button>
+              <button className="cancel-button" onClick={() => setShowModal(false)}>
+                Cancel
+              </button>
+            </div>
           </div>
         </motion.div>
       )}

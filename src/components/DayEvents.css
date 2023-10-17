@@ -1,0 +1,18 @@
+.event-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.event-description {
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: left;
+}
+
+.edit-button,
+.delete-button {
+  margin-left: 10px;
+}

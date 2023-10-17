@@ -38,15 +38,16 @@ interface UseEventReturn {
   setEventDesc: Dispatch<SetStateAction<string>>;
   hasEvent: (date: Date) => boolean;
   addEvent: () => void;
-  getDayClass: (day: Date) => string;
+  getDayClass: (day: Date, selectedDate: Date | null) => string;
   deleteEvent: (id: string) => void;
   rearrangEvent: (newOrderEvents: Event[]) => void;
+  editEvent: (updatedEvent: Event) => void;
 }
 
-export const useEvent = (initialEvents: Event[]): UseEventReturn => {
+export const useEvent = (initialEvents: Event[], currentDate: Date): UseEventReturn => {
   const [events, setEvents] = useState(initialEvents);
   const [showModal, setShowModal] = useState(false);
-  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  const [selectedDate, setSelectedDate] = useState<Date | null>(currentDate);
   const [eventDesc, setEventDesc] = useState<string>("");
 
   const hasEvent = (date: Date): boolean => events.some((event) => event.date.toDateString() === date.toDateString());
@@ -64,6 +65,14 @@ export const useEvent = (initialEvents: Event[]): UseEventReturn => {
     }
   };
 
+  const editEvent = (updatedEvent: Event): void => {
+    const newEvents = events.map((event) => {
+      if (event.id === updatedEvent.id) return updatedEvent;
+      return event;
+    });
+    setEvents(newEvents);
+  };
+
   const deleteEvent = (id: string) => {
     setEvents(events.filter((event) => event.id !== id));
   };
@@ -72,12 +81,17 @@ export const useEvent = (initialEvents: Event[]): UseEventReturn => {
     setEvents(newOrderEvents);
   };
 
-  const getDayClass = (day: Date): string => {
+  const getDayClass = (day: Date, selectedDate: Date | null): string => {
+    let classes = "";
     const isTodayDate = isToday(day);
-    if (isTodayDate && hasEvent(day)) return "today-event";
-    if (isTodayDate) return "today";
-    if (hasEvent(day)) return "event";
-    return "";
+
+    if (isTodayDate && hasEvent(day)) classes += " today-event";
+    else if (isTodayDate) classes += " today";
+    else if (hasEvent(day)) classes += " event";
+
+    if (selectedDate && selectedDate.toDateString() === day.toDateString()) classes += " selected";
+
+    return classes.trim();
   };
 
   return {
@@ -93,6 +107,7 @@ export const useEvent = (initialEvents: Event[]): UseEventReturn => {
     addEvent,
     getDayClass,
     deleteEvent,
+    editEvent,
     rearrangEvent,
   };
 };

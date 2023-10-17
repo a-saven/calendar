@@ -7,11 +7,11 @@ interface CalendarDaysProps {
   events: Event[];
   setEvents: React.Dispatch<React.SetStateAction<Event[]>>;
   getDayClass: (day: Date) => string;
-  setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
   setSelectedDate: React.Dispatch<React.SetStateAction<Date | null>>;
+  selectedDate: Date | null;
 }
 
-const CalendarDays: React.FC<CalendarDaysProps> = ({ days, getDayClass, setShowModal, setSelectedDate }) => {
+const CalendarDays: React.FC<CalendarDaysProps> = ({ days, getDayClass, setSelectedDate, selectedDate }) => {
   return (
     <div className="calendar-container">
       {days.map((day) => (
@@ -19,8 +19,8 @@ const CalendarDays: React.FC<CalendarDaysProps> = ({ days, getDayClass, setShowM
           key={day.toString()}
           className={`calendar-day ${getDayClass(day)}`}
           onClick={() => {
+            console.log(day);
             setSelectedDate(day);
-            setShowModal(true);
           }}
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}

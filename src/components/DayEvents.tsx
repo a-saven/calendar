@@ -1,13 +1,27 @@
 import React, { useRef, useEffect } from "react";
 import { Event } from "./hooks";
+import { format } from "date-fns";
+import "./DayEvents.css";
 
 interface DayEventsProps {
   events: Event[];
+  currentDate: Date;
+  selectedDate: Date | null;
   onDelete: (id: string) => void;
   onRearrange: (events: Event[]) => void;
+  onEdit: (event: Event) => void;
+  setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const DayEvents: React.FC<DayEventsProps> = ({ events, onDelete, onRearrange }) => {
+const DayEvents: React.FC<DayEventsProps> = ({
+  events,
+  currentDate,
+  selectedDate,
+  onDelete,
+  onEdit,
+  onRearrange,
+  setShowModal,
+}) => {
   const dragItem = useRef<any>();
   const dragItemNode = useRef<any>();
 
@@ -46,19 +60,34 @@ const DayEvents: React.FC<DayEventsProps> = ({ events, onDelete, onRearrange }) 
     }
   };
 
+  const filteredEvents = events.filter((event) => selectedDate?.toDateString() === event.date.toDateString());
+
   return (
-    <div>
-      <h2>Events for Today</h2>
+    <div className="day-events-container">
+      <h2>Events Event for {format(selectedDate!, "MMMM do, yyyy")}</h2>
       <ul ref={dragItemNode}>
-        {events.map((event, index) => (
+        <button className="icon-button" onClick={() => setShowModal(true)}>
+          ➕
+        </button>
+        {filteredEvents.map((event, index) => (
           <li
             key={event.id}
+            className="draggable-event event-item"
             draggable
             onDragEnter={(e) => handleDragEnter(e, index)}
             onDragStart={(e) => handleDragStart(e, index)}
           >
-            <span>{event.description}</span>
-            <button onClick={() => onDelete(event.id)}>X</button>
+            <div className="event-description">
+              <span>{event.description}</span>
+            </div>
+            <div>
+              <button className="icon-button edit-button" onClick={() => onEdit(event)}>
+                ✏️
+              </button>
+              <button className="icon-button delete-button" onClick={() => onDelete(event.id)}>
+                ❌
+              </button>
+            </div>
           </li>
         ))}
       </ul>

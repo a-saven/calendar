@@ -145,6 +145,29 @@ input[type="text"] {
   color: white;
 }
 
+.day-events-container {
+  width: 100%;
+  max-width: 600px; /* or whatever width your calendar is */
+  margin: 0 auto;
+}
+
+.icon-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.draggable-event {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.calendar-day.selected {
+  background-color: teal;
+  color: #fff;
+}
+
 @media screen and (max-width: 600px) {
   .modal {
     width: 90%;
