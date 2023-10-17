@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { format, startOfMonth, endOfMonth, eachDayOfInterval, addMonths, subMonths, isToday, getDay } from "date-fns";
 import "./Calendar.css";
+import { motion, AnimatePresence } from "framer-motion";
 
 interface Event {
   date: Date;
@@ -53,7 +54,7 @@ const Calendar = () => {
         </span>
       </div>
       <div className="calendar-header">
-        {["Sun", "Mon", "Tues", "Wednes", "Thurs", "Fri", "Satur"].map((day) => (
+        {["S", "M", "T", "W", "T", "F", "S"].map((day) => (
           <div key={day}>{day}</div>
         ))}
       </div>
@@ -61,39 +62,51 @@ const Calendar = () => {
         {Array.from({ length: getDay(start) }).map((_, idx) => (
           <div key={`empty-start-${idx}`} className="calendar-day empty"></div>
         ))}
-
         {days.map((day) => (
-          <div
+          <motion.div
             key={day.toString()}
             className={`calendar-day ${getDayClass(day)}`}
             onClick={() => {
               setSelectedDate(day);
               setShowModal(true);
             }}
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 10 }}
           >
             {format(day, "d")}
-          </div>
+          </motion.div>
         ))}
         {Array.from({ length: 6 - getDay(end) }).map((_, idx) => (
           <div key={`empty-end-${idx}`} className="calendar-day emty"></div>
         ))}
       </div>
-      {showModal && (
-        <div className="overlay" onClick={() => setShowModal(false)}>
-          <div
-            className="modal"
-            onClick={(e) => e.stopPropagation()} // Prevent clicks on the modal from closing it
+      <AnimatePresence>
+        {showModal && (
+          <motion.div
+            className="overlay"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setShowModal(false)}
           >
-            <button className="close-button" onClick={() => setShowModal(false)}>
-              X
-            </button>
-            <h2>Add Event for {format(selectedDate!, "MMMM do, yyyy")}</h2>
-            <input type="text" value={eventDesc} onChange={(e) => setEventDesc(e.target.value)} />
-            <button onClick={addEvent}>Add</button>
-            <button onClick={() => setShowModal(false)}>Cancel</button>
-          </div>
-        </div>
-      )}
+            <div className="overlay" onClick={() => setShowModal(false)}>
+              <div
+                className="modal"
+                onClick={(e) => e.stopPropagation()} // Prevent clicks on the modal from closing it
+              >
+                <button className="close-button" onClick={() => setShowModal(false)}>
+                  X
+                </button>
+                <h2>Add Event for {format(selectedDate!, "MMMM do, yyyy")}</h2>
+                <input type="text" value={eventDesc} onChange={(e) => setEventDesc(e.target.value)} />
+                <button onClick={addEvent}>Add</button>
+                <button onClick={() => setShowModal(false)}>Cancel</button>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };
