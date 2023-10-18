@@ -1,11 +1,12 @@
-import React, { useState } from "react";
+import React from "react";
 import CalendarNav from "../Navigation/Navigation";
 import CalendarHeader from "../Header/Header";
 import CalendarDays from "../Days/Days";
 import EventModal from "../EventModal/EventModal";
 import DayEvents from "../DayEvents/DayEvents";
+import { useEvent } from "../utils/useEvent";
+import { useCalendar } from "../utils/useCalendar";
 import "./Calendar.css";
-import { useCalendar, useEvent, Event } from "../utils/hooks";
 
 const Calendar: React.FC = () => {
   const { currentDate, setCurrentDate, days } = useCalendar(new Date());
@@ -22,26 +23,10 @@ const Calendar: React.FC = () => {
     getDayClass,
     deleteEvent,
     rearrangEvent,
+    isEditing,
+    startEditEvent,
+    updateEvent,
   } = useEvent([], currentDate);
-
-  const [isEditing, setIsEditing] = useState(false);
-  const [editedEvent, setEditedEvent] = useState<Event | null>(null);
-
-  const editEvent = (event: Event) => {
-    setIsEditing(true);
-    setSelectedDate(event.date);
-    setEventDesc(event.description);
-    setShowModal(true);
-    setEditedEvent(event);
-  };
-
-  const updateEvent = () => {
-    if (editedEvent) {
-      setEvents(events.map((e) => (e.id === editedEvent.id ? { ...editedEvent, description: eventDesc } : e)));
-      setIsEditing(false);
-      setShowModal(false);
-    }
-  };
 
   return (
     <div className="calendar-wrapper" data-testid="calendar-wrapper">
@@ -60,7 +45,7 @@ const Calendar: React.FC = () => {
         events={events}
         onDelete={deleteEvent}
         onRearrange={rearrangEvent}
-        onEdit={editEvent}
+        onEdit={startEditEvent} // Changed from editEvent to startEditEvent
         setShowModal={setShowModal}
       />
       <EventModal

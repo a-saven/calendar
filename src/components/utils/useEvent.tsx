@@ -1,5 +1,5 @@
 import { useState, SetStateAction, Dispatch } from "react";
-import { startOfMonth, endOfMonth, eachDayOfInterval, isToday } from "date-fns";
+import { isToday } from "date-fns";
 import { v4 as uuidv4 } from "uuid";
 
 export interface Event {
@@ -7,25 +7,6 @@ export interface Event {
   date: Date;
   description: string;
 }
-
-interface UseCalendarReturn {
-  currentDate: Date;
-  setCurrentDate: Dispatch<SetStateAction<Date>>;
-  days: Date[];
-}
-
-export const useCalendar = (initialDate: Date): UseCalendarReturn => {
-  const [currentDate, setCurrentDate] = useState(initialDate);
-  const start = startOfMonth(currentDate);
-  const end = endOfMonth(currentDate);
-  const days = eachDayOfInterval({ start, end });
-
-  return {
-    currentDate,
-    setCurrentDate,
-    days,
-  };
-};
 
 interface UseEventReturn {
   events: Event[];
@@ -42,6 +23,9 @@ interface UseEventReturn {
   deleteEvent: (id: string) => void;
   rearrangEvent: (newOrderEvents: Event[]) => void;
   editEvent: (updatedEvent: Event) => void;
+  isEditing: boolean;
+  startEditEvent: (event: Event) => void;
+  updateEvent: () => void;
 }
 
 export const useEvent = (initialEvents: Event[], currentDate: Date): UseEventReturn => {
@@ -49,6 +33,27 @@ export const useEvent = (initialEvents: Event[], currentDate: Date): UseEventRet
   const [showModal, setShowModal] = useState(false);
   const [selectedDate, setSelectedDate] = useState<Date | null>(currentDate);
   const [eventDesc, setEventDesc] = useState<string>("");
+  // Add these new states to handle editing
+  const [isEditing, setIsEditing] = useState(false);
+  const [editedEvent, setEditedEvent] = useState<Event | null>(null);
+
+  // New function to start editing an event
+  const startEditEvent = (event: Event) => {
+    setIsEditing(true);
+    setSelectedDate(event.date);
+    setEventDesc(event.description);
+    setShowModal(true);
+    setEditedEvent(event);
+  };
+
+  // Function to update an event
+  const updateEvent = () => {
+    if (editedEvent) {
+      setEvents(events.map((e) => (e.id === editedEvent.id ? { ...editedEvent, description: eventDesc } : e)));
+      setIsEditing(false);
+      setShowModal(false);
+    }
+  };
 
   const hasEvent = (date: Date): boolean => events.some((event) => event.date.toDateString() === date.toDateString());
 
@@ -109,5 +114,8 @@ export const useEvent = (initialEvents: Event[], currentDate: Date): UseEventRet
     deleteEvent,
     editEvent,
     rearrangEvent,
+    isEditing,
+    startEditEvent,
+    updateEvent,
   };
 };
