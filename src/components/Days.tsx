@@ -1,6 +1,7 @@
 import { format } from "date-fns";
 import { motion } from "framer-motion";
 import { Event } from "./hooks";
+import "./Days.css";
 
 interface CalendarDaysProps {
   days: Date[];
@@ -12,21 +13,28 @@ interface CalendarDaysProps {
 }
 
 const CalendarDays: React.FC<CalendarDaysProps> = ({ days, getDayClass, setSelectedDate, selectedDate }) => {
+  const firstDayOfMonth = days[0].getDay();
+
+  // Generate an array of null values to represent blank days
+  const blankDays = Array.from({ length: firstDayOfMonth }, () => null);
+
+  // Combine blankDays and actual days
+  const allDays = [...blankDays, ...days];
+
   return (
     <div className="calendar-container">
-      {days.map((day) => (
+      {allDays.map((day, index) => (
         <motion.div
-          key={day.toString()}
-          className={`calendar-day ${getDayClass(day)}`}
+          key={day ? day.toString() : `blank-${index}`}
+          className={`calendar-day ${day ? getDayClass(day!) : ""} ${day ? "" : "non-interactive"}`}
           onClick={() => {
-            console.log(day);
-            setSelectedDate(day);
+            if (day) setSelectedDate(day);
           }}
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: 10 }}
         >
-          {format(day, "d")}
+          {day ? format(day!, "d") : ""}
         </motion.div>
       ))}
     </div>

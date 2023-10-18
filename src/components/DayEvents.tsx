@@ -64,7 +64,7 @@ const DayEvents: React.FC<DayEventsProps> = ({
 
   return (
     <div className="day-events-container">
-      <h2>Events Event for {format(selectedDate!, "MMMM do, yyyy")}</h2>
+      <h2>Events for {format(selectedDate!, "MMMM do, yyyy")}</h2>
       <ul ref={dragItemNode}>
         <button className="icon-button" onClick={() => setShowModal(true)}>
           ➕
