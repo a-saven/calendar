@@ -1,5 +1,5 @@
 import React, { useRef, useEffect } from "react";
-import { Event } from "./hooks";
+import { Event } from "../utils/hooks";
 import { format } from "date-fns";
 import "./DayEvents.css";
 

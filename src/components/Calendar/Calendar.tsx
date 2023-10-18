@@ -1,11 +1,11 @@
 import React, { useState } from "react";
-import CalendarNav from "./Navigation";
-import CalendarHeader from "./Header";
-import CalendarDays from "./Days";
-import EventModal from "./EventModal";
-import DayEvents from "./DayEvents";
+import CalendarNav from "../Navigation/Navigation";
+import CalendarHeader from "../Header/Header";
+import CalendarDays from "../Days/Days";
+import EventModal from "../EventModal/EventModal";
+import DayEvents from "../DayEvents/DayEvents";
 import "./Calendar.css";
-import { useCalendar, useEvent, Event } from "./hooks";
+import { useCalendar, useEvent, Event } from "../utils/hooks";
 
 const Calendar: React.FC = () => {
   const { currentDate, setCurrentDate, days } = useCalendar(new Date());
