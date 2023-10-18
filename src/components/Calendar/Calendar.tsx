@@ -52,7 +52,6 @@ const Calendar: React.FC = () => {
         events={events}
         setEvents={setEvents}
         setSelectedDate={setSelectedDate}
-        selectedDate={selectedDate}
         getDayClass={(day) => getDayClass(day, selectedDate)}
       />
       <DayEvents

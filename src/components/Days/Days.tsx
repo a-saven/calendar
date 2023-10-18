@@ -9,10 +9,9 @@ interface CalendarDaysProps {
   setEvents: React.Dispatch<React.SetStateAction<Event[]>>;
   getDayClass: (day: Date) => string;
   setSelectedDate: React.Dispatch<React.SetStateAction<Date | null>>;
-  selectedDate: Date | null;
 }
 
-const CalendarDays: React.FC<CalendarDaysProps> = ({ days, getDayClass, setSelectedDate, selectedDate }) => {
+const CalendarDays: React.FC<CalendarDaysProps> = ({ days, getDayClass, setSelectedDate }) => {
   const firstDayOfMonth = days[0].getDay();
 
   // Generate an array of null values to represent blank days
