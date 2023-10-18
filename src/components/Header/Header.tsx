@@ -1,3 +1,5 @@
+import "./Header.css";
+
 const CalendarHeader: React.FC = () => {
   return (
     <div className="calendar-header">

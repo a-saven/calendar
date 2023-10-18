@@ -1,4 +1,5 @@
 import { format, addMonths, subMonths } from "date-fns";
+import "./Navigation.css";
 
 interface CalendarNavProps {
   currentDate: Date;

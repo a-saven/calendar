@@ -16,3 +16,21 @@
 .delete-button {
   margin-left: 10px;
 }
+
+.day-events-container {
+  width: 100%;
+  max-width: 600px; /* or whatever width your calendar is */
+  margin: 0 auto;
+}
+
+.icon-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.draggable-event {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
