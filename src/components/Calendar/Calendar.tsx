@@ -13,16 +13,19 @@ const Calendar: React.FC = () => {
   const {
     events,
     setEvents,
-    showModal,
     setShowModal,
-    selectedDate,
     setSelectedDate,
-    eventDesc,
     setEventDesc,
+
+    showModal,
+
+    selectedDate,
+
+    eventDesc,
     addEvent,
     getDayClass,
     deleteEvent,
-    rearrangEvent,
+    rearrangeEvents,
     isEditing,
     startEditEvent,
     updateEvent,
@@ -40,11 +43,10 @@ const Calendar: React.FC = () => {
         getDayClass={(day) => getDayClass(day, selectedDate)}
       />
       <DayEvents
-        currentDate={currentDate}
         selectedDate={selectedDate}
         events={events}
         onDelete={deleteEvent}
-        onRearrange={rearrangEvent}
+        onRearrange={rearrangeEvents}
         onEdit={startEditEvent} // Changed from editEvent to startEditEvent
         setShowModal={setShowModal}
       />

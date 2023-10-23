@@ -6,8 +6,8 @@ interface EventModalProps {
   showModal: boolean;
   selectedDate: Date | null;
   eventDesc: string;
-  setEventDesc: React.Dispatch<React.SetStateAction<string>>;
-  setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
+  setEventDesc: (desc: string) => void;
+  setShowModal: (flag: boolean) => void;
   addEvent: () => void;
   editEvent: () => void;
   isEditing: boolean;

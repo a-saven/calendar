@@ -5,23 +5,14 @@ import "./DayEvents.css";
 
 interface DayEventsProps {
   events: Event[];
-  currentDate: Date;
   selectedDate: Date | null;
   onDelete: (id: string) => void;
   onRearrange: (events: Event[]) => void;
   onEdit: (event: Event) => void;
-  setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
+  setShowModal: (flag: boolean) => void;
 }
 
-const DayEvents: React.FC<DayEventsProps> = ({
-  events,
-  currentDate,
-  selectedDate,
-  onDelete,
-  onEdit,
-  onRearrange,
-  setShowModal,
-}) => {
+const DayEvents: React.FC<DayEventsProps> = ({ events, selectedDate, onDelete, onEdit, onRearrange, setShowModal }) => {
   const dragItem = useRef<any>();
   const dragItemNode = useRef<any>();
 

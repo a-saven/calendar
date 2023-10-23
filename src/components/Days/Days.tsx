@@ -6,9 +6,9 @@ import "./Days.css";
 interface CalendarDaysProps {
   days: Date[];
   events: Event[];
-  setEvents: React.Dispatch<React.SetStateAction<Event[]>>;
+  setEvents: (newEvents: Event[]) => void; // updated this line
   getDayClass: (day: Date) => string;
-  setSelectedDate: React.Dispatch<React.SetStateAction<Date | null>>;
+  setSelectedDate: (date: Date | null) => void; // updated this line
 }
 
 const CalendarDays: React.FC<CalendarDaysProps> = ({ days, getDayClass, setSelectedDate }) => {
