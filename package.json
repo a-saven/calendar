@@ -11,6 +11,8 @@
     "@types/react": "^18.0.0",
     "@types/react-dom": "^18.0.0",
     "@types/uuid": "^9.0.5",
+    "@vercel/kv": "^0.2.3",
+    "@vercel/node": "^3.0.7",
     "date-fns": "^2.30.0",
     "framer-motion": "^10.16.4",
     "react": "^18.2.0",

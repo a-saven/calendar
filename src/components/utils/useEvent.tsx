@@ -1,18 +1,30 @@
-import { useReducer } from "react";
+import { useReducer, useEffect } from "react";
 import { isToday } from "date-fns";
 import { Event, UseEventReturn } from "./EventTypes";
 import { reducer } from "./EventReducer";
+import { addEventKV, getEventsKV, editEventKV, deleteEventKV } from "./api";
 
-
-export const useEvent = (initialEvents: Event[], currentDate: Date): UseEventReturn => {
+export const useEvent = (currentDate: Date): UseEventReturn => {
   const [state, dispatch] = useReducer(reducer, {
-    events: initialEvents,
+    events: [],
     showModal: false,
     selectedDate: currentDate,
     eventDesc: "",
     isEditing: false,
     editedEvent: null,
   });
+
+  useEffect(() => {
+    fetchInitialEvents();
+  }, []);
+
+  const fetchInitialEvents = async () => {
+    const events = await getEventsKV();
+    // if (events) {
+    //   dispatch({ type: "SET_EVENTS", payload: events });
+    // }
+    return [];
+  };
 
   const hasEvent = (date: Date): boolean =>
     state.events.some((event) => event.date.toDateString() === date.toDateString());
@@ -25,7 +37,10 @@ export const useEvent = (initialEvents: Event[], currentDate: Date): UseEventRet
     dispatch({ type: "UPDATE_EVENT" });
   };
 
-  const addEvent = () => {
+  const addEvent = async () => {
+    if (state.editedEvent) {
+      await addEventKV(state.editedEvent);
+    }
     dispatch({ type: "ADD_EVENT" });
   };
 
@@ -33,7 +48,10 @@ export const useEvent = (initialEvents: Event[], currentDate: Date): UseEventRet
     dispatch({ type: "SET_EVENTS", payload: newEvents });
   };
 
-  const deleteEvent = (id: string) => {
+  const deleteEvent = async (id: string) => {
+    if (state.editedEvent) {
+      await deleteEventKV(state.editedEvent.id); // Duplicate in Vercel KV
+    }
     dispatch({ type: "DELETE_EVENT", payload: id });
   };
 
@@ -41,7 +59,10 @@ export const useEvent = (initialEvents: Event[], currentDate: Date): UseEventRet
     dispatch({ type: "REARRANGE_EVENTS", payload: newOrderEvents });
   };
 
-  const editEvent = (updatedEvent: Event) => {
+  const editEvent = async (updatedEvent: Event) => {
+    if (state.editedEvent) {
+      await editEventKV(state.editedEvent.id, state.editedEvent); // Duplicate in Vercel KV
+    }
     dispatch({ type: "EDIT_EVENT", payload: updatedEvent });
   };
 

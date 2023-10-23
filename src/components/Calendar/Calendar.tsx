@@ -26,7 +26,7 @@ const Calendar: React.FC = () => {
     rearrangeEvents,
     startEditEvent,
     updateEvent,
-  } = useEvent([], currentDate);
+  } = useEvent(currentDate);
 
   return (
     <div className="calendar-wrapper" data-testid="calendar-wrapper">
