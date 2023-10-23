@@ -12,21 +12,18 @@ const Calendar: React.FC = () => {
   const { currentDate, setCurrentDate, days } = useCalendar(new Date());
   const {
     events,
+    showModal,
+    selectedDate,
+    eventDesc,
+    isEditing,
     setEvents,
     setShowModal,
     setSelectedDate,
     setEventDesc,
-
-    showModal,
-
-    selectedDate,
-
-    eventDesc,
     addEvent,
     getDayClass,
     deleteEvent,
     rearrangeEvents,
-    isEditing,
     startEditEvent,
     updateEvent,
   } = useEvent([], currentDate);
