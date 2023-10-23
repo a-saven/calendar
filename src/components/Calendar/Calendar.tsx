@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 import CalendarNav from "../Navigation/Navigation";
 import CalendarHeader from "../Header/Header";
 import CalendarDays from "../Days/Days";
@@ -28,6 +28,8 @@ const Calendar: React.FC = () => {
     updateEvent,
   } = useEvent(currentDate);
 
+  const memoizedGetDayClass = useCallback((day: Date) => getDayClass(day, selectedDate), [getDayClass, selectedDate]);
+
   return (
     <div className="calendar-wrapper" data-testid="calendar-wrapper">
       <CalendarNav currentDate={currentDate} setCurrentDate={setCurrentDate} />
@@ -37,7 +39,7 @@ const Calendar: React.FC = () => {
         events={events}
         setEvents={setEvents}
         setSelectedDate={setSelectedDate}
-        getDayClass={(day) => getDayClass(day, selectedDate)}
+        getDayClass={(day) => memoizedGetDayClass(day)}
       />
       <DayEvents
         selectedDate={selectedDate}

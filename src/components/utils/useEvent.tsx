@@ -1,4 +1,4 @@
-import { useReducer, useEffect } from "react";
+import { useReducer, useEffect, useMemo, useCallback } from "react";
 import { isToday } from "date-fns";
 import { Event, UseEventReturn } from "./EventTypes";
 import { reducer } from "./EventReducer";
@@ -26,12 +26,17 @@ export const useEvent = (currentDate: Date): UseEventReturn => {
     return [];
   };
 
-  const hasEvent = (date: Date): boolean =>
-    state.events.some((event) => event.date.toDateString() === date.toDateString());
+  const hasEvent = useCallback(
+    (date: Date): boolean => state.events.some((event) => event.date.toDateString() === date.toDateString()),
+    [state.events]
+  );
 
-  const startEditEvent = (event: Event) => {
-    dispatch({ type: "START_EDIT", payload: event });
-  };
+  const startEditEvent = useCallback(
+    (event: Event) => {
+      dispatch({ type: "START_EDIT", payload: event });
+    },
+    [dispatch]
+  );
 
   const updateEvent = () => {
     dispatch({ type: "UPDATE_EVENT" });
@@ -78,18 +83,22 @@ export const useEvent = (currentDate: Date): UseEventReturn => {
     dispatch({ type: "SET_EVENT_DESC", payload: desc });
   };
 
-  const getDayClass = (day: Date, selectedDate: Date | null): string => {
-    let classes = "";
-    const isTodayDate = isToday(day);
+  const getDayClass = useMemo(
+    () =>
+      (day: Date, selectedDate: Date | null): string => {
+        let classes = "";
+        const isTodayDate = isToday(day);
 
-    if (isTodayDate && hasEvent(day)) classes += " today-event";
-    else if (isTodayDate) classes += " today";
-    else if (hasEvent(day)) classes += " event";
+        if (isTodayDate && hasEvent(day)) classes += " today-event";
+        else if (isTodayDate) classes += " today";
+        else if (hasEvent(day)) classes += " event";
 
-    if (selectedDate && selectedDate.toDateString() === day.toDateString()) classes += " selected";
+        if (selectedDate && selectedDate.toDateString() === day.toDateString()) classes += " selected";
 
-    return classes.trim();
-  };
+        return classes.trim();
+      },
+    [hasEvent]
+  );
 
   return {
     ...state,
