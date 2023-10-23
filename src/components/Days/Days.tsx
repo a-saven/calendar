@@ -1,6 +1,6 @@
 import { format } from "date-fns";
 import { motion } from "framer-motion";
-import { Event } from "../utils/useEvent";
+import { Event } from "../utils/EventTypes";
 import "./Days.css";
 
 interface CalendarDaysProps {
